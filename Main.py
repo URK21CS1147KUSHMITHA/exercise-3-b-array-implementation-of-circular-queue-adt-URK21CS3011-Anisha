@@ -1,71 +1,51 @@
 class MyCircularQueue:
     def __init__(self, size: int):
         # Write code here
+        self.queue = [0] * size
         self.size = size
-        self.queue = [None]*size
-        self.rear = -1
-        self.front = -1
+        self.front, self.rear = -1, -1
 
     def enqueue(self, value: int) -> bool:
         # Write code here
-        if (self.rear==(self.size-1) and self.front==0) or (self.front==self.rear+1):
+        if self.is_full():
             return False
+        if self.front == -1:
+            self.front, self.rear = 0, 0
         else:
-             if self.front==-1:
-                self.front=0
-                self.rear=0
-             else:
-                #if self.rear==self.size-1:
-                 #   self.rear=0
-                #else:
-                self.rear=(self.rear+1)%self.size
-             self.queue[self.rear]=value
-             return True
-               
+            self.rear = (self.rear + 1) % self.size
+        self.queue[self.rear] = value
+        return True
+
+
     def dequeue(self) -> bool:
         # Write code here
-        if (self.front == -1): 
+        if self.is_empty(): 
             return False
+        if self.front == self.rear:
+            self.front, self.rear = -1, -1
         else:
-             if (self.front == self.rear):
-                temp=self.queue[self.front]
-                #del self.queue[self.front]
-                self.front = -1
-                self.rear = -1
-                return True
-             else:
-                temp = self.queue[self.front]
-                #del self.queue[self.front]
-                self.front = (self.front + 1)%self.size
-                return True
-  
+            self.front = (self.front + 1) % self.size
+        return True
+
     def get_front(self) -> int:
         # Write code here
-        if (self.front == -1): 
-            return -1
-        else:
+        if not self.is_empty():
             return self.queue[self.front]
-        
+        return -1
+
     def get_rear(self):
         # Write code here
-        if (self.front == -1): 
-            return -1
-        else:
+        if not self.is_empty():
             return self.queue[self.rear]
-        
+        return -1
+    
     def is_empty(self):
         # Write code here
-        if self.front==-1:
-            return True
-        else:
-            return False
-        
+        return self.front == -1
+
     def is_full(self):
         # Write code here
-        if (self.rear==(self.size-1) and self.front==0) or (self.front==self.rear+1):
-            return True
-        else:
-            return False
+        return (self.front == 0 and self.rear == (self.size - 1)) or (self.front == (self.rear + 1) % self.size)
 
 # Do not change the following code
 operations = []
